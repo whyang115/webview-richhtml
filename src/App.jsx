@@ -21,6 +21,15 @@ const token =
   "QCLMePM7TGMVvirxL32Y9696IlLrdz4OsGRlRoWB:1IzZc2hY-HwEv8RmqBC0wdIu2EU=:eyJzY29wZSI6Im1kcGljIiwicmV0dXJuQm9keSI6IntcImtleVwiOlwiJChrZXkpXCIsXCJldGFnXCI6XCIkKGV0YWcpXCIsXCJidWNrZXRcIjpcIiQoYnVja2V0KVwiLFwiZnNpemVcIjpcIiQoZnNpemUpXCIsXCJzZXJ2ZXJOYW1lXCI6XCIkKHg6c2VydmVyTmFtZSlcIixcImZpbGVQYXRoXCI6XCIkKHg6ZmlsZVBhdGgpXCIsXCJmaWxlTmFtZVwiOlwiJCh4OmZpbGVOYW1lKVwiLFwib3JpZ2luYWxGaWxlTmFtZVwiOlwiJCh4Om9yaWdpbmFsRmlsZU5hbWUpXCIsXCJmaWxlRXh0XCI6XCIkKHg6ZmlsZUV4dClcIn0iLCJkZWFkbGluZSI6MTU3MzQwMTU5OSwiaW5zZXJ0T25seSI6MCwiZGV0ZWN0TWltZSI6MCwiZnNpemVMaW1pdCI6MH0=";
 
 export default class EditorDemo extends React.Component {
+  constructor(props) {
+    super(props);
+    window.forceUpdateApp = function({ html, token }) {
+      this.setState({
+        editorState: BraftEditor.createEditorState(html),
+        token
+      });
+    };
+  }
   state = {
     // 创建一个空的editorState作为初始值
     editorState: BraftEditor.createEditorState(null),
@@ -59,14 +68,6 @@ export default class EditorDemo extends React.Component {
         });
     });
   };
-  componentDidMount() {
-    window.forceUpdateApp = function({ html, token }) {
-      this.setState({
-        editorState: BraftEditor.createEditorState(html),
-        token
-      });
-    };
-  }
 
   handleEditorChange = editorState => {
     this.setState({ editorState });
