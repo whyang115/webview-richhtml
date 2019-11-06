@@ -23,18 +23,20 @@ const token =
 export default class EditorDemo extends React.Component {
   constructor(props) {
     super(props);
-    window.forceUpdateApp = function({ html, token }) {
+    this.state = {
+      // 创建一个空的editorState作为初始值
+      editorState: BraftEditor.createEditorState(null),
+      token: ""
+    };
+    window.forceUpdateApp = ({ html, token }) => {
+      console.log(this);
       this.setState({
         editorState: BraftEditor.createEditorState(html),
         token
       });
     };
   }
-  state = {
-    // 创建一个空的editorState作为初始值
-    editorState: BraftEditor.createEditorState(null),
-    token: ""
-  };
+
   randomStr = () =>
     Math.random()
       .toString(16)
