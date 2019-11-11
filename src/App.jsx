@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import axios from "axios";
 import { Base64 } from "js-base64";
 import styled from "styled-components";
@@ -14,6 +14,10 @@ const AppWrap = styled.div`
   border: 1px solid #eee;
   .braftEditorWrap {
     overflow: hidden;
+    box-sizing: border-box;
+  }
+  .bf-content {
+    height: 100%;
   }
 `;
 
@@ -28,13 +32,23 @@ export default class EditorDemo extends React.Component {
       editorState: BraftEditor.createEditorState(null),
       token: ""
     };
-    window.forceUpdateApp = ({ html, token }) => {
-      console.log(this);
+    window.forceUpdateApp = ({ html, token, base64 }) => {
+      alert(html);
       this.setState({
-        editorState: BraftEditor.createEditorState(html),
+        editorState: BraftEditor.createEditorState(
+          html || Base64.decode(base64)
+        ),
         token
       });
     };
+    window.onKeyChange = () => {
+      this.forceUpdate();
+    };
+  }
+  componentDidMount() {
+    const $editor = document.querySelector(".braftEditorWrap ");
+    const $control = document.querySelector(".bf-controlbar");
+    $editor.style.paddingBottom = $control.offsetHeight + 10 + "px";
   }
 
   randomStr = () =>
@@ -74,7 +88,6 @@ export default class EditorDemo extends React.Component {
   handleEditorChange = editorState => {
     this.setState({ editorState });
     window.richTextHtml = editorState.toHTML();
-    console.log(editorState.toHTML());
   };
 
   render() {
