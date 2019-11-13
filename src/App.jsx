@@ -3,6 +3,7 @@ import axios from "axios";
 import { Base64 } from "js-base64";
 import styled from "styled-components";
 import { get } from "lodash";
+import cx from "classnames";
 // 引入编辑器组件
 import BraftEditor from "braft-editor";
 // 引入编辑器样式
@@ -12,6 +13,13 @@ import "./App.css";
 const AppWrap = styled.div`
   height: 100%;
   border: 1px solid #eee;
+  .previewWrap {
+    overflow: auto;
+    height: 100%;
+  }
+  .previewContent {
+    padding: 20px 0;
+  }
   .braftEditorWrap {
     overflow: hidden;
     box-sizing: border-box;
@@ -30,25 +38,25 @@ export default class EditorDemo extends React.Component {
     this.state = {
       // 创建一个空的editorState作为初始值
       editorState: BraftEditor.createEditorState(null),
-      token: ""
+      token: "",
+      preview: true
     };
-    window.forceUpdateApp = ({ html, token, base64 }) => {
-      alert(html);
+    window.getTokenAndHtml = (token, base64) => {
       this.setState({
-        editorState: BraftEditor.createEditorState(
-          html || Base64.decode(base64)
-        ),
+        editorState: BraftEditor.createEditorState(Base64.decode(base64)),
         token
       });
     };
-    window.onKeyChange = () => {
-      this.forceUpdate();
+    window.switchPreview = str => {
+      this.setState({ preview: str === "true" ? true : false });
     };
   }
   componentDidMount() {
     const $editor = document.querySelector(".braftEditorWrap ");
     const $control = document.querySelector(".bf-controlbar");
-    $editor.style.paddingBottom = $control.offsetHeight + 10 + "px";
+    if ($editor && $control) {
+      $editor.style.paddingBottom = $control.offsetHeight + 10 + "px";
+    }
   }
 
   randomStr = () =>
@@ -93,44 +101,48 @@ export default class EditorDemo extends React.Component {
   render() {
     const controls = [
       "headings",
-      "font-size",
-      "separator",
       "text-color",
       "bold",
       "italic",
       "underline",
       "strike-through",
       "separator",
-      "text-align",
-      "separator",
       "list-ul",
       "list-ol",
-      "blockquote",
       { key: "media", title: "添加图片", text: "添加图片" },
       "separator",
       "undo",
       "redo"
     ];
-    const { editorState } = this.state;
+    const { editorState, preview } = this.state;
     return (
-      <AppWrap className="App">
-        <BraftEditor
-          className="braftEditorWrap"
-          media={{
-            accepts: { video: false, audio: false, image: true },
-            externals: {
-              video: false,
-              audio: false,
-              image: true,
-              embed: false
-            },
-            uploadFn: this.uploadFile
-          }}
-          controls={controls}
-          value={editorState}
-          onChange={this.handleEditorChange}
-          onSave={this.submitContent}
-        />
+      <AppWrap className={cx("App", "preview")}>
+        {preview ? (
+          <div className="previewWrap">
+            <div
+              className="previewContent"
+              dangerouslySetInnerHTML={{ __html: editorState.toHTML() }}
+            ></div>
+          </div>
+        ) : (
+          <BraftEditor
+            className="braftEditorWrap"
+            media={{
+              accepts: { video: false, audio: false, image: true },
+              externals: {
+                video: false,
+                audio: false,
+                image: true,
+                embed: false
+              },
+              uploadFn: this.uploadFile
+            }}
+            controls={controls}
+            value={editorState}
+            onChange={this.handleEditorChange}
+            onSave={this.submitContent}
+          />
+        )}
       </AppWrap>
     );
   }
