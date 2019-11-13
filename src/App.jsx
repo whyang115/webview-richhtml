@@ -16,6 +16,9 @@ const AppWrap = styled.div`
   .previewWrap {
     overflow: auto;
     height: 100%;
+    img {
+      width: 100%;
+    }
   }
   .previewContent {
     padding: 20px 0;
@@ -42,8 +45,10 @@ export default class EditorDemo extends React.Component {
       preview: true
     };
     window.getTokenAndHtml = (token, base64) => {
+      const html = Base64.decode(base64);
+      window.richTextHtml = html;
       this.setState({
-        editorState: BraftEditor.createEditorState(Base64.decode(base64)),
+        editorState: BraftEditor.createEditorState(html),
         token
       });
     };
