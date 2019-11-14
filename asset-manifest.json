@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/webview-richhtml/static/css/main.226a7976.chunk.css",
-    "main.js": "/webview-richhtml/static/js/main.265dfd0a.chunk.js",
-    "main.js.map": "/webview-richhtml/static/js/main.265dfd0a.chunk.js.map",
+    "main.js": "/webview-richhtml/static/js/main.1d60b067.chunk.js",
+    "main.js.map": "/webview-richhtml/static/js/main.1d60b067.chunk.js.map",
     "runtime-main.js": "/webview-richhtml/static/js/runtime-main.7835a263.js",
     "runtime-main.js.map": "/webview-richhtml/static/js/runtime-main.7835a263.js.map",
     "static/css/2.54d918f9.chunk.css": "/webview-richhtml/static/css/2.54d918f9.chunk.css",
     "static/js/2.ce7ec6aa.chunk.js": "/webview-richhtml/static/js/2.ce7ec6aa.chunk.js",
     "static/js/2.ce7ec6aa.chunk.js.map": "/webview-richhtml/static/js/2.ce7ec6aa.chunk.js.map",
     "index.html": "/webview-richhtml/index.html",
-    "precache-manifest.ed3215029f95e9649b9ebd50077aeee7.js": "/webview-richhtml/precache-manifest.ed3215029f95e9649b9ebd50077aeee7.js",
+    "precache-manifest.d77cb77c9d0676a19a4e284ea80fa05f.js": "/webview-richhtml/precache-manifest.d77cb77c9d0676a19a4e284ea80fa05f.js",
     "service-worker.js": "/webview-richhtml/service-worker.js",
     "static/css/2.54d918f9.chunk.css.map": "/webview-richhtml/static/css/2.54d918f9.chunk.css.map",
     "static/css/main.226a7976.chunk.css.map": "/webview-richhtml/static/css/main.226a7976.chunk.css.map"
@@ -19,6 +19,6 @@
     "static/css/2.54d918f9.chunk.css",
     "static/js/2.ce7ec6aa.chunk.js",
     "static/css/main.226a7976.chunk.css",
-    "static/js/main.265dfd0a.chunk.js"
+    "static/js/main.1d60b067.chunk.js"
   ]
 }
