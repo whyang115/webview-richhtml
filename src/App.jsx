@@ -19,9 +19,12 @@ const AppWrap = styled.div`
     img {
       width: 100%;
     }
+    p {
+      margin: 0;
+    }
   }
   .previewContent {
-    padding: 20px 0;
+    padding: 15px;
   }
   .braftEditorWrap {
     overflow: hidden;
@@ -33,7 +36,7 @@ const AppWrap = styled.div`
 `;
 
 const token =
-  "QCLMePM7TGMVvirxL32Y9696IlLrdz4OsGRlRoWB:1IzZc2hY-HwEv8RmqBC0wdIu2EU=:eyJzY29wZSI6Im1kcGljIiwicmV0dXJuQm9keSI6IntcImtleVwiOlwiJChrZXkpXCIsXCJldGFnXCI6XCIkKGV0YWcpXCIsXCJidWNrZXRcIjpcIiQoYnVja2V0KVwiLFwiZnNpemVcIjpcIiQoZnNpemUpXCIsXCJzZXJ2ZXJOYW1lXCI6XCIkKHg6c2VydmVyTmFtZSlcIixcImZpbGVQYXRoXCI6XCIkKHg6ZmlsZVBhdGgpXCIsXCJmaWxlTmFtZVwiOlwiJCh4OmZpbGVOYW1lKVwiLFwib3JpZ2luYWxGaWxlTmFtZVwiOlwiJCh4Om9yaWdpbmFsRmlsZU5hbWUpXCIsXCJmaWxlRXh0XCI6XCIkKHg6ZmlsZUV4dClcIn0iLCJkZWFkbGluZSI6MTU3MzQwMTU5OSwiaW5zZXJ0T25seSI6MCwiZGV0ZWN0TWltZSI6MCwiZnNpemVMaW1pdCI6MH0=";
+  "QCLMePM7TGMVvirxL32Y9696IlLrdz4OsGRlRoWB:mia__LDQq3pz6TTVVV-R8AWZoUg=:eyJzY29wZSI6Im1kcGljIiwicmV0dXJuQm9keSI6IntcImtleVwiOlwiJChrZXkpXCIsXCJldGFnXCI6XCIkKGV0YWcpXCIsXCJidWNrZXRcIjpcIiQoYnVja2V0KVwiLFwiZnNpemVcIjpcIiQoZnNpemUpXCIsXCJzZXJ2ZXJOYW1lXCI6XCIkKHg6c2VydmVyTmFtZSlcIixcImZpbGVQYXRoXCI6XCIkKHg6ZmlsZVBhdGgpXCIsXCJmaWxlTmFtZVwiOlwiJCh4OmZpbGVOYW1lKVwiLFwib3JpZ2luYWxGaWxlTmFtZVwiOlwiJCh4Om9yaWdpbmFsRmlsZU5hbWUpXCIsXCJmaWxlRXh0XCI6XCIkKHg6ZmlsZUV4dClcIn0iLCJkZWFkbGluZSI6MTU3NDE3OTE5OSwiaW5zZXJ0T25seSI6MCwiZGV0ZWN0TWltZSI6MCwiZnNpemVMaW1pdCI6MH0=";
 
 export default class EditorDemo extends React.Component {
   constructor(props) {
@@ -54,16 +57,24 @@ export default class EditorDemo extends React.Component {
     };
     window.switchPreview = str => {
       this.setState({ preview: str === "true" ? true : false });
+      if (str === "false") {
+        this.computeBottomPadding();
+      }
     };
   }
   componentDidMount() {
+    if (!this.state.preview) {
+      this.computeBottomPadding();
+    }
+  }
+
+  computeBottomPadding = () => {
     const $editor = document.querySelector(".braftEditorWrap ");
     const $control = document.querySelector(".bf-controlbar");
     if ($editor && $control) {
       $editor.style.paddingBottom = $control.offsetHeight + 10 + "px";
     }
-  }
-
+  };
   randomStr = () =>
     Math.random()
       .toString(16)
@@ -97,6 +108,14 @@ export default class EditorDemo extends React.Component {
         });
     });
   };
+  // computeContentHeight = () => {
+  //   const $wrap = document.querySelector(".bf-content");
+  //   const $content = document.querySelector("[data-contents='true']");
+  //   if (!$wrap || !$content) return;
+  //   if ($wrap.offsetHeight < $content.offsetHeight) {
+  //     $wrap.style.height = `${$content.offsetHeight}px`;
+  //   }
+  // };
 
   handleEditorChange = editorState => {
     this.setState({ editorState });

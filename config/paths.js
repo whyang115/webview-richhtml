@@ -1,5 +1,3 @@
-"use strict";
-
 const path = require("path");
 const fs = require("fs");
 const url = require("url");
@@ -65,6 +63,7 @@ const resolveModule = (resolveFn, filePath) => {
   return resolveFn(`${filePath}.js`);
 };
 
+console.log(getServedPath(resolveApp("package.json")));
 // config after eject: we're in ./config/
 module.exports = {
   dotenv: resolveApp(".env"),
