@@ -4,6 +4,7 @@ import { Base64 } from 'js-base64';
 import styled from 'styled-components';
 import { get } from 'lodash';
 import cx from 'classnames';
+import { v4 as uuid } from 'uuid';
 // 引入编辑器组件
 import BraftEditor from 'braft-editor';
 // 引入编辑器样式
@@ -78,16 +79,15 @@ export default class EditorDemo extends React.Component {
   uploadFile = ({ file, error, progress, success }) => {
     const { uploadServer, token, key } = this.state;
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsArrayBuffer(file);
     reader.addEventListener('load', data => {
       const result = get(data, ['target', 'result']);
       const type = file.type.split('/')[1];
-      const fileData = result.split(',')[1];
-      const fileName = Base64.encode(`${this.randomStr()}.${type}`);
+      const fileBlobData = new Blob([result]);
       const formData = new FormData();
-      formData.append('key', `${key}${fileName}.${type}`);
+      formData.append('key', `${key}${uuid()}.${type}`);
       formData.append('token', token);
-      formData.append('file', fileData);
+      formData.append('file', fileBlobData);
       axios({
         url: uploadServer,
         method: 'POST',

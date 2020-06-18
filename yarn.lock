@@ -7374,6 +7374,11 @@ pkg-up@2.0.0:
   dependencies:
     find-up "^2.1.0"
 
+plupload@^2.3.6:
+  version "2.3.6"
+  resolved "https://registry.npm.taobao.org/plupload/download/plupload-2.3.6.tgz#2608acf735d5e8db83248724d78d81757bb43866"
+  integrity sha1-Jgis9zXV6NuDJIck142BdXu0OGY=
+
 pn@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npm.taobao.org/pn/download/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
@@ -9988,6 +9993,11 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.3.3"
   resolved "https://registry.npm.taobao.org/uuid/download/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
   integrity sha1-RWjwIW54dg7h2/Ok0s9T4iQRKGY=
+
+uuid@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.npm.taobao.org/uuid/download/uuid-8.1.0.tgz#6f1536eb43249f473abc6bd58ff983da1ca30d8d"
+  integrity sha1-bxU260Mkn0c6vGvVj/mD2hyjDY0=
 
 v8-compile-cache@^2.0.3:
   version "2.1.0"
