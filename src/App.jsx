@@ -12,7 +12,6 @@ import "./App.css";
 
 const AppWrap = styled.div`
   height: 100%;
-  border: 1px solid #eee;
   .previewWrap {
     overflow: auto;
     height: 100%;
@@ -35,7 +34,7 @@ const AppWrap = styled.div`
   }
 `;
 
-const token =
+const TOKEN =
   "QCLMePM7TGMVvirxL32Y9696IlLrdz4OsGRlRoWB:mia__LDQq3pz6TTVVV-R8AWZoUg=:eyJzY29wZSI6Im1kcGljIiwicmV0dXJuQm9keSI6IntcImtleVwiOlwiJChrZXkpXCIsXCJldGFnXCI6XCIkKGV0YWcpXCIsXCJidWNrZXRcIjpcIiQoYnVja2V0KVwiLFwiZnNpemVcIjpcIiQoZnNpemUpXCIsXCJzZXJ2ZXJOYW1lXCI6XCIkKHg6c2VydmVyTmFtZSlcIixcImZpbGVQYXRoXCI6XCIkKHg6ZmlsZVBhdGgpXCIsXCJmaWxlTmFtZVwiOlwiJCh4OmZpbGVOYW1lKVwiLFwib3JpZ2luYWxGaWxlTmFtZVwiOlwiJCh4Om9yaWdpbmFsRmlsZU5hbWUpXCIsXCJmaWxlRXh0XCI6XCIkKHg6ZmlsZUV4dClcIn0iLCJkZWFkbGluZSI6MTU3NDE3OTE5OSwiaW5zZXJ0T25seSI6MCwiZGV0ZWN0TWltZSI6MCwiZnNpemVMaW1pdCI6MH0=";
 
 export default class EditorDemo extends React.Component {
@@ -45,17 +44,20 @@ export default class EditorDemo extends React.Component {
       // 创建一个空的editorState作为初始值
       editorState: BraftEditor.createEditorState(null),
       token: "",
-      preview: true
+      uploadServer: "https://upload.qiniup.com/putb64/-1/key/upload/",
+      previewServer:"https://pic.mingdao.com/",
+      key: "",
+      preview: true,
     };
-    window.getTokenAndHtml = (token, base64) => {
-      const html = Base64.decode(base64);
+    window.getPara = (para) => {
+      const {html,...rest} =JSON.parse( Base64.decode(para))
       window.richTextHtml = html;
       this.setState({
         editorState: BraftEditor.createEditorState(html),
-        token
+       ...rest 
       });
     };
-    window.switchPreview = str => {
+    window.switchPreview = (str) => {
       this.setState({ preview: str === "true" ? true : false });
       if (str === "false") {
         this.computeBottomPadding();
@@ -75,35 +77,34 @@ export default class EditorDemo extends React.Component {
       $editor.style.paddingBottom = $control.offsetHeight + 10 + "px";
     }
   };
-  randomStr = () =>
-    Math.random()
-      .toString(16)
-      .slice(2);
+  randomStr = () => Math.random().toString(16).slice(2);
 
   uploadFile = ({ file, error, progress, success }) => {
+    const { uploadServer, token, key } = this.state;
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.addEventListener("load", data => {
+    reader.addEventListener("load", (data) => {
       const result = get(data, ["target", "result"]);
       const type = file.type.split("/")[1];
-      const key = Base64.encode(`upload/${this.randomStr()}.${type}`);
-      const url = `https://upload.qiniup.com/putb64/-1/key/${key}`;
+      const defaultKey = Base64.encode(`${this.randomStr()}.${type}`);
+      const wholeUrl = `${uploadServer}${key || defaultKey}`;
       axios
-        .post(url, result.split(",")[1], {
+        .post(wholeUrl, result.split(",")[1], {
           headers: {
             "Content-Type": "application/octet-stream",
-            Authorization: `UpToken ${this.state.token || token}`
+            Authorization: `UpToken ${token || TOKEN}`,
           },
-          onUploadProgress: function(data) {
+          onUploadProgress: function (data) {
             progress && progress((data.loaded / data.total) * 100);
-          }
+          },
         })
         .then(({ data }) => {
+          const {previewServer} = this.props
           const { key = "" } = data || {};
-          const url = `https://pic.mingdao.com/${key}`;
+          const url = `${previewServer}${key}`;
           success({ url });
         })
-        .catch(err => {
+        .catch((err) => {
           error(err);
         });
     });
@@ -117,7 +118,7 @@ export default class EditorDemo extends React.Component {
   //   }
   // };
 
-  handleEditorChange = editorState => {
+  handleEditorChange = (editorState) => {
     this.setState({ editorState });
     window.richTextHtml = editorState.toHTML();
   };
@@ -136,7 +137,7 @@ export default class EditorDemo extends React.Component {
       { key: "media", title: "添加图片", text: "添加图片" },
       "separator",
       "undo",
-      "redo"
+      "redo",
     ];
     const { editorState, preview } = this.state;
     return (
@@ -157,9 +158,9 @@ export default class EditorDemo extends React.Component {
                 video: false,
                 audio: false,
                 image: true,
-                embed: false
+                embed: false,
               },
-              uploadFn: this.uploadFile
+              uploadFn: this.uploadFile,
             }}
             controls={controls}
             value={editorState}
